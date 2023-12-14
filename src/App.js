@@ -1,34 +1,21 @@
-import React, { useState } from 'react';
+import React, { useState, useCallback, useEffect } from 'react';
 import './App.css';
 import Button from '@mui/material/Button';
 import Snackbar from '@mui/material/Snackbar';
 import IconButton from '@mui/material/IconButton';
 import CloseIcon from '@mui/icons-material/Close';
 import Clock from './ComponentLibrary/clock'; // 假设 Clock 组件和 App 组件在同一目录下
+import DataFetcher from './ComponentLibrary/dataFetcher';
+import LadyListEditor from './ComponentLibrary/ladylistEditor';
 
 function App() {
-  const data = [
-    "Ssis-743",
-    "Stars-734",
-    "Stars-804",
-    "Stars-759",
-    "Mide-875",
-    "ipx-741",
-    "Ipx-580",
-    "Ipx-811",
-    "ipx-641",
-    "sdmt-155",
-    "DLDSS-232",
-    "jjda-016",
-    "stars-368",
-    "snis-499",
-    "ipx-691",
-    "mide-128",
-    "ssis-858",
-    "MIMK-138"
-  ];
-  const [open, setOpen] = useState(false);
+  const [open, setOpen,] = useState(false);
   const [message, setMessage] = useState('');
+  const [data, setData] = useState([]);
+
+  const handleDataFetched = useCallback((fetchedData) => {
+    setData(fetchedData);
+  }, []); // 确保这个函数不会在每次渲染时都改变
 
   const copyToClipboard = (str) => {
     navigator.clipboard.writeText(str).then(function () {
@@ -46,7 +33,16 @@ function App() {
     }
     setOpen(false);
   };
+  const fetchData = useCallback(() => {
+    fetch('api/getladylist')
+      .then(response => response.json())
+      .then(data => setData(data))
+      .catch(error => console.error('Error fetching data:', error));
+  }, []);
 
+  useEffect(() => {
+    fetchData();
+  }, [fetchData]);
   const action = (
     <React.Fragment>
       <Button color="secondary" size="small" onClick={handleClose}>
@@ -60,8 +56,9 @@ function App() {
 
   return (
     <div className="App">
-      <h1>我的内容</h1>
+      <h1>芜湖</h1>
       <Clock /> {/* 这里渲染时钟 */}
+      <DataFetcher onDataFetched={handleDataFetched} />
       <div className="flex-container">
         {data.map((item, index) => (
           <div key={index} className="flex-item">
@@ -69,9 +66,11 @@ function App() {
           </div>
         ))}
       </div>
+      <LadyListEditor onRefresh={fetchData} /> {/* 使用新组件 */}
+
       <Snackbar
         open={open}
-        autoHideDuration={6000}
+        autoHideDuration={3000}
         onClose={handleClose}
         message={message}
         action={action}

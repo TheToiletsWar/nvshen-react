@@ -94,3 +94,14 @@ button {
   border: 1px solid #ddd;
   border-radius: 5px;
 }
+
+@media (max-width: 600px) {
+  .flex-container {
+    flex-direction: column; /* 在小屏幕上垂直堆叠元素 */
+  }
+
+  .flex-item {
+    width: 100%; /* 让每个元素在小屏幕上占满整个容器宽度 */
+    margin-bottom: 10px; /* 添加一些间距 */
+  }
+}
