@@ -4,6 +4,7 @@ import Button from '@mui/material/Button';
 import Snackbar from '@mui/material/Snackbar';
 import IconButton from '@mui/material/IconButton';
 import CloseIcon from '@mui/icons-material/Close';
+import Clock from './ComponentLibrary/clock'; // 假设 Clock 组件和 App 组件在同一目录下
 
 function App() {
   const data = [
@@ -60,6 +61,7 @@ function App() {
   return (
     <div className="App">
       <h1>我的内容</h1>
+      <Clock /> {/* 这里渲染时钟 */}
       <div className="flex-container">
         {data.map((item, index) => (
           <div key={index} className="flex-item">
@@ -75,6 +77,7 @@ function App() {
         action={action}
       />
       <footer className="footer">
+
         <h3>友情链接</h3>
         <ul>
           <li><a href="https://example.com/link1" target="_blank" rel="noopener noreferrer">链接1</a></li>
